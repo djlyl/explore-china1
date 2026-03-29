@@ -63,40 +63,53 @@ export default function AIChat({ cultureContext, theme }: AIChatProps) {
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: userMessage.content,
-          conversationId,
-          cultureContext
-        }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        const assistantMessage: Message = {
+      // 检查是否在静态模式下
+      if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
+        // 静态模式下的降级处理
+        const staticResponse: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: data.response,
+          content: '您好！我是文化助手。由于当前是静态部署环境，AI功能暂时不可用。请在本地开发环境中使用完整的AI功能。',
           timestamp: new Date()
         }
-
-        setMessages(prev => [...prev, assistantMessage])
-        if (data.conversationId) {
-          setConversationId(data.conversationId)
-        }
+        setMessages(prev => [...prev, staticResponse])
       } else {
-        const errorMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: data.error || '抱歉，服务出现错误，请稍后再试。',
-          timestamp: new Date()
+        // 正常API调用
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: userMessage.content,
+            conversationId,
+            cultureContext
+          }),
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          const assistantMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: data.response,
+            timestamp: new Date()
+          }
+
+          setMessages(prev => [...prev, assistantMessage])
+          if (data.conversationId) {
+            setConversationId(data.conversationId)
+          }
+        } else {
+          const errorMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: data.error || '抱歉，服务出现错误，请稍后再试。',
+            timestamp: new Date()
+          }
+          setMessages(prev => [...prev, errorMessage])
         }
-        setMessages(prev => [...prev, errorMessage])
       }
     } catch (error) {
       console.error('Chat error:', error)
