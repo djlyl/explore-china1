@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     '中国艺术',
     '中国哲学',
   ],
-  authors: [{ name: '探索中国团队', url: 'http://localhost:3000' }],
+  authors: [{ name: '探索中国团队', url: 'https://explore-china1.vercel.app' }],
   generator: '探索中国',
   // icons: {
   //   icon: '',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: '探索中国 | 领略中华五千年文明',
     description:
       '探索中国是一个展示中国文化、历史和传统的平台，带你领略中华五千年文明的魅力。',
-    url: 'http://localhost:3000',
+    url: 'https://explore-china1.vercel.app',
     siteName: '探索中国',
     locale: 'zh_CN',
     type: 'website',
@@ -61,7 +61,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-CN">
       <body className={`antialiased`}>
         {children}
       </body>

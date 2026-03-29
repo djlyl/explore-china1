@@ -1,4 +1,5 @@
 import { cultureData } from '@/data/culture'
+import type { Metadata } from 'next'
 
 export function generateStaticParams() {
   const params: { id: string; bookIndex: string }[] = []
@@ -17,7 +18,7 @@ export function generateStaticParams() {
   return params
 }
 
-export async function generateMetadata({ params }: { params: { id: string; bookIndex: string } }) {
+export async function generateMetadata({ params }: { params: { id: string; bookIndex: string } }): Promise<Metadata> {
   const { id, bookIndex } = params
   const item = cultureData.find((item) => item.id === id)
   if (!item || !item.books) {

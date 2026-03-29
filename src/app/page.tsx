@@ -1,17 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import Link from 'next/link'
-import TimeDisplay from '@/components/TimeDisplay'
-import CultureStats from '@/components/CultureStats'
 import { cultureData } from '@/data/culture'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Sparkles, Clock, BookOpen, Heart, Users, TrendingUp } from 'lucide-react'
-import AIChat from '@/components/AIChat'
 import { motion } from 'framer-motion'
 import { TimePeriod, getTimePeriod, periodThemes, timePeriodInfo } from '@/lib/timeTheme'
+
+const AIChat = lazy(() => import('@/components/AIChat'))
+const TimeDisplay = lazy(() => import('@/components/TimeDisplay'))
+const CultureStats = lazy(() => import('@/components/CultureStats'))
 
 export default function Home() {
   const [timePeriod, setTimePeriod] = useState<TimePeriod>(getTimePeriod(new Date().getHours()))
@@ -100,7 +101,9 @@ export default function Home() {
                 探索中国文华的深厚底蕴与独特魅力
               </p>
             </div>
-            <TimeDisplay />
+            <Suspense fallback={<div className="w-64 h-64 bg-gray-100 rounded-2xl animate-pulse"></div>}>
+              <TimeDisplay />
+            </Suspense>
           </div>
         </header>
 
@@ -111,7 +114,9 @@ export default function Home() {
           transition={{ delay: 0.05 }}
           className="mb-8"
         >
-          <CultureStats />
+          <Suspense fallback={<div className="h-32 bg-gray-100 rounded-lg animate-pulse"></div>}>
+            <CultureStats />
+          </Suspense>
         </motion.div>
 
         {/* 功能介绍区 */}
@@ -290,7 +295,9 @@ export default function Home() {
         </footer>
       </div>
 
-      <AIChat theme={theme} />
+      <Suspense fallback={null}>
+        <AIChat theme={theme} />
+      </Suspense>
     </div>
   )
 }
