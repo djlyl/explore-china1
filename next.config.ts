@@ -1,8 +1,6 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // outputFileTracingRoot: path.resolve(__dirname, '../../'),
-  /* config options here */
   allowedDevOrigins: ['*.dev.coze.site', '192.168.*.*', 'localhost:*'],
   images: {
     remotePatterns: [
@@ -14,8 +12,8 @@ const nextConfig: NextConfig = {
     ],
   },
   output: 'export',
-  trailingSlash: true,
   distDir: 'out',
+  trailingSlash: true,
 };
 
 export default nextConfig;
